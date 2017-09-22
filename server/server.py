@@ -12,6 +12,9 @@ class Fly4to6Server(asyncio.Protocol):
         self.loop = loop
 
     def connection_made(self, transport):
+        log.info('Connection from {}'.format(
+            transport.get_extra_info('peername')))
+
         self.transport = transport
 
     def data_received(self, data):
