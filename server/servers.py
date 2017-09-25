@@ -19,7 +19,7 @@ class Fly4to6Server(asyncio.Protocol):
 
     def data_received(self, data):
         message = data.decode()
-        message = Parser.tcp_parser(message)
+        # message = Parser.tcp_parser(message)
         resp = self.middleman.forwards(message)
 
         self.transport.write(resp)

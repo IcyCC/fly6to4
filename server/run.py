@@ -1,5 +1,5 @@
 import asyncio
-from .server import Fly4to6Server
+from server.servers import Fly4to6Server
 from public.logger import log
 
 if __name__ == '__main__':
