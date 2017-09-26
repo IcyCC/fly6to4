@@ -8,3 +8,11 @@ class Parser:
             "port": "",
             "data": data
         }
+
+    @classmethod
+    def http_parser(cls, ip, port, data):
+        return {
+            "ip": ip,
+            "port": port,
+            "data": data
+        }

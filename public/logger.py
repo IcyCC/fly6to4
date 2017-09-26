@@ -7,7 +7,7 @@ logging.basicConfig(level=logging.DEBUG,
                     filemode='w')
 
 console = logging.StreamHandler()
-console.setLevel(logging.INFO)
+console.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
 console.setFormatter(formatter)
 log = logging.getLogger(__name__)

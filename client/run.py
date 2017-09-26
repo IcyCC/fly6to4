@@ -1,11 +1,13 @@
 import asyncio
 from client.local import Fly4to6local
 from public.logger import log
+import logging
 
 if __name__ == '__main__':
 
     loop = asyncio.get_event_loop()
     loop.set_debug(True)
+    logging.getLogger('asyncio').setLevel(logging.DEBUG)
     local_server = loop.create_server(lambda: Fly4to6local(loop=loop,host="127.0.0.1",port=8080),
                                       host="127.0.0.1",port=1080)
     server = loop.run_until_complete(local_server)

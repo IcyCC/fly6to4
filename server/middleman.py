@@ -3,20 +3,17 @@ from public.logger import log
 
 class Middleman:
 
-    def __init__(self, loop):
-        self.loop = loop
-
-    async def forwards(self, message):
+    @classmethod
+    async def forwards(cls, message):
         reader, writer = await asyncio.open_connection(message.get("ip"),
-                                                       message.get("port"),
-                                                       self.loop
+                                                       message.get("port")
                                                        )
-        writer.write(message.encode())
-        log.debug("Send to public len: {}".format(str(len(message))))
+        writer.write(message.get('data'))
+        log.debug("Send to public len: {}".format((message.get("ip"),message.get("port"))))
 
-        data = await reader.read(100)
+        data = await reader.read(1024)
         resp = b''
-        while data is not None:
+        while data:
             resp = resp + data
             data = await reader.read(100)
 
