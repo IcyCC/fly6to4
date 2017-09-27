@@ -4,31 +4,32 @@ from public.logger import log
 
 class Fly6to4Client():
 
-    def __init__(self, host, port, loop):
-        self.loop = loop
-        self.host = host
-        self.port = port
-        self.writer = None
-        self.reader = None
 
-    async def connection(self):
-        self.reader, self.writer = await asyncio.open_connection(
-                        self.host, self.port,loop=self.loop
+    loop = None
+    host = ''
+    port = ''
+
+
+    @classmethod
+    async def send_data(cls, msg):
+        reader, writer = await asyncio.open_connection(
+                        cls.host, cls.port, loop=cls.loop
                         )
         log.info("Client connection host: {} ,port: {} ".format(
-            self.host, self.port
+            cls.host, cls.port
         ))
 
-    async def send_data(self, msg):
-        if self.writer is None and self.reader is None:
-            await self.connection()
-        self.writer.write(msg)
+        writer.write(msg)
+        await writer.drain()
         log.info("Client write mesg :{}".format(str(msg)))
-        data = await self.reader.read(100)
-        resp = b''
-        while data is not None:
-            resp = resp + data
-            data = await self.reader.read(100)
+        data = await reader.read(-1)
 
-        log.info("Client receive resp {}".format(str(resp)))
-        return resp
+        log.info("Client receive resp {}".format(str(data)))
+        # resp = b''
+        # while data:
+        #     resp = resp + data
+        #     data = await self.reader.read(1024)
+
+        # log.info("Client finish receive resp {}".format(str(resp)))
+        writer.close()
+        return data
