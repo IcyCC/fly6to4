@@ -20,7 +20,7 @@ class Fly6to4Client():
         ))
 
         writer.write(msg)
-        await writer.drain()
+        # await writer.drain()
         log.info("Client write mesg :{}".format(str(msg)))
         data = await reader.read(-1)
 
