@@ -23,11 +23,10 @@ class Client(asyncio.Protocol):
     def data_received(self, data):
         log.debug(" server midlleman receive data with length {}".format(len(data)))
         self.transport.write(data)
+        self.transport.write_eof()
 
     def connection_lost(self, *args):
         self.connected = False
-        self.transport.close()
-
 
 class Fly4to6Server(asyncio.Protocol):
 
@@ -63,6 +62,7 @@ class Fly4to6Server(asyncio.Protocol):
             resp = b'\x05' + struct.pack('!B', self.method)
             log.info("HELLO FINISH")
             self.transport.write(resp)
+            self.transport.write_eof()
 
             if self.method == constants.METHOD_NOAC:
                 self.transport.close()
@@ -109,6 +109,7 @@ class Fly4to6Server(asyncio.Protocol):
 
     def auth(self, data):
         self.transport.write(b'\x01\x00')
+        self.transport.write_eof()
 
     def parse_connect(self, atyp, data):
         cur = 4
@@ -145,10 +146,12 @@ class Fly4to6Server(asyncio.Protocol):
             resp += struct.pack('!B', int(i))
         resp += struct.pack('!H', port)
         self.transport.write(resp)
+        self.transport.write_eof()
         log.debug("Server connected to {}, {}".format(domain, port))
 
     async def send_data(self, data):
         await self.waiter
         self._client.transport.write(data)
+
 
 

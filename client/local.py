@@ -35,8 +35,8 @@ class Fly4to6local(asyncio.Protocol):
     def connection_lost(self, exc):
         log.info('Local server closed the connection')
         log.info('Stop the event loop')
-        del self.connections[self]
 
 def send_2_local(fu, transport):
     transport.write(fu.result())
-    transport.close()
+    log.debug("send2local")
+    transport.write_eof()
